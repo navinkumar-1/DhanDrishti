@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #1a6dff;
+  --color-primary-pressed: #1252d6;
+  --color-primary-tint: #eaf1ff;
+  --color-on-primary: #ffffff;
+  --color-canvas: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f7f9;
+  --color-border: #e8ebf0;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
+  --color-tooltip: #1f2933;
+  --color-positive: #0e9f6e;
+  --color-positive-bg: #e3f6ee;
+  --color-danger: #d9480f;
+  --color-danger-bg: #ffe9dd;
+  --color-warning: #b7791f;
+  --color-warning-bg: #fff4d6;
+  --color-illustrative: #6d4aff;
+  --color-illustrative-bg: #efeaff;
+  --color-single: #5b6b82;
+  --color-single-bg: #eef1f5;
+  --color-equity: #f2683c;
+  --color-etf: #00a3c4;
+  --color-mf: #7c5cfa;
+  --color-reit: #f59e0b;
+  --color-invit: #12b76a;
+  --color-bond: #ef6c8a;
+  --color-unknown: #9ca3af;
+  --font-sans: var(--font-inter), var(--font-noto), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 14px;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -480px 0;
+  }
+  100% {
+    background-position: 480px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f6f7f9 0%, #eceff3 45%, #f6f7f9 90%);
+  background-size: 960px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+:focus-visible {
+  outline: 2px solid #1a6dff;
+  outline-offset: 2px;
+}
+
+.app-sidebar,
+.app-nav-label,
+.app-brand-name,
+.app-promo {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .app-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 72px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-shell {
+    grid-template-columns: 236px minmax(0, 1fr);
+  }
+
+  .app-sidebar {
+    width: 236px;
+  }
+
+  .app-nav-label,
+  .app-brand-name {
+    display: inline;
+  }
+
+  .app-promo {
+    display: block;
+  }
+}

@@ -1,0 +1,7 @@
+account,depository,isin,name,quantity,as_of
+Demat A,CDSL,INESYN000001,Meridian Bank,100,2026-09-29
+Demat A,CDSL,INESYN000002,Coastal Bank,40,2026-09-29
+Demat A,CDSL,INESYN000004,Broad Market ETF,100,2026-09-29
+Demat A,CDSL,INESYN000006,Aster Industries,12,2026-09-29
+Demat B,NSDL,INESYN000006,Aster Industries,8,2026-09-29
+Demat A,CDSL,INESYN000014,Unclassified Series A,10,2026-08-31

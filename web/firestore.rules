@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Global reference data (read: signed in users)
+    match /appConfig/{id}              { allow read: if signedIn(); allow write: if false; }
+    match /instruments/{isin}          { allow read: if signedIn(); allow write: if false; }
+    match /prices/{isin}               { allow read: if signedIn(); allow write: if false; }
+    match /prices/{isin}/daily/{d}     { allow read: if signedIn(); allow write: if false; }
+    match /entities/{id}               { allow read: if signedIn(); allow write: if false; }
+    match /relationships/{id}          { allow read: if signedIn(); allow write: if false; }
+    match /education/{id}              { allow read: if signedIn(); allow write: if false; }
+    match /samplePortfolios/{id}       { allow read: if signedIn(); allow write: if false; }
+
+    // Server only collections
+    match /serverSecrets/{id}          { allow read, write: if false; }
+    match /oauthStates/{id}            { allow read, write: if false; }
+    match /deletionJobs/{id}           { allow read, write: if false; }
+
+    // Bootstrap profile & user collections. Email stays in Firebase Auth.
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.dataMode == 'empty'
+        && request.resource.data.preferredLanguage in ['en', 'hi']
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 80
+        && request.resource.data.knownMissingAccounts.size() == 0;
+      allow update: if isOwner(uid);
+      allow delete: if false;
+
+      // Default: owner can read all user subcollections
+      match /{document=**} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      // Live broker import / client writes from signed-in owner
+      function ownerLiveWrite() {
+        return isOwner(uid)
+          && request.resource.data.isSample == false
+          && request.resource.data.schemaVersion == 1;
+      }
+
+      match /connections/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /accounts/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /sources/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /holdingSnapshots/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /holdings/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /portfolio/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /insights/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /reconciliationIssues/{id} {
+        allow create, update: if ownerLiveWrite();
+        allow delete: if isOwner(uid);
+      }
+      match /scenarios/{id} {
+        allow create, update, delete: if isOwner(uid);
+      }
+      match /understandingChecks/{id} {
+        allow create, delete: if isOwner(uid);
+      }
+    }
+  }
+}
