@@ -69,8 +69,10 @@ export function AuthScreen({ mode }: { mode: "login" | "signup" }) {
   const title = mode === "signup" ? "Create your account" : "Log in";
 
   function fillDemoCredentials() {
-    setEmail("pushkarshinde141@gmail.com");
-    setPassword("Pushk@r141");
+    setName("Navinkumar Gadade");
+    setEmail("gadadenavinkumar@gmail.com");
+    setPassword("Navin@123");
+    setConfirm("Navin@123");
     setError(null);
   }
 
@@ -84,11 +86,9 @@ export function AuthScreen({ mode }: { mode: "login" | "signup" }) {
         <form onSubmit={onSubmit} className="rounded-[14px] border border-border bg-surface p-6">
           <h1 className="text-[28px] leading-9 font-bold">{title}</h1>
           <p className="mt-2 text-[14px] text-text-secondary">Email and password. This does not connect a broker.</p>
-          {mode === "login" ? (
-            <SecondaryButton type="button" className="mt-4 w-full" onClick={fillDemoCredentials}>
-              Demo Credentials
-            </SecondaryButton>
-          ) : null}
+          <SecondaryButton type="button" className="mt-4 w-full" onClick={fillDemoCredentials}>
+            Demo Credentials
+          </SecondaryButton>
           <div className="mt-5 space-y-3">
             {mode === "signup" ? (
               <Field label="Name" value={name} onChange={setName} autoComplete="name" />
